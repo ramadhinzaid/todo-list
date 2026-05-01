@@ -5,7 +5,6 @@ import { TaskFilters } from './components/TaskFilters';
 import { TaskList } from './components/TaskList';
 import { TaskSkeleton } from './components/TaskSkeleton';
 import { ListChecks } from 'lucide-react';
-import './App.css';
 
 function App() {
   const { 
