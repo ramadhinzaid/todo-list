@@ -55,7 +55,7 @@ export const useTasks = () => {
   const addTask = (title) => {
     if (!title.trim()) return;
     const newTask = {
-      id: Date.now(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       title,
       completed: false,
     };
