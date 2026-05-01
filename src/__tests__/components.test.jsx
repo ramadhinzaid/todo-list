@@ -43,12 +43,15 @@ describe('Components', () => {
       expect(onToggle).toHaveBeenCalledWith(1);
     });
 
-    it('should call onDelete when delete button is clicked', () => {
+    it('should call onDelete when delete button is clicked and confirmed', async () => {
       const onDelete = vi.fn();
       render(<TaskItem task={task} onToggle={() => {}} onDelete={onDelete} />);
       
-      const deleteButton = screen.getByLabelText(/delete task/i);
-      fireEvent.click(deleteButton);
+      const deleteButtons = screen.getAllByLabelText(/delete task/i);
+      fireEvent.click(deleteButtons[0]);
+
+      const buttons = await screen.findAllByRole('button', { name: /delete/i });
+      fireEvent.click(buttons[1]);
 
       expect(onDelete).toHaveBeenCalledWith(1);
     });

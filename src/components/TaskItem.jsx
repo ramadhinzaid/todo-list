@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Trash2, CheckCircle, Circle } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { ConfirmModal } from './ConfirmModal';
 
 export const TaskItem = ({ task, onToggle, onDelete }) => {
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
   const handleDelete = () => {
     onDelete(task.id);
     toast.success('Task deleted');
+    setIsConfirmOpen(false);
   };
 
   return (
@@ -29,12 +34,20 @@ export const TaskItem = ({ task, onToggle, onDelete }) => {
       </span>
 
       <button
-        onClick={handleDelete}
+        onClick={() => setIsConfirmOpen(true)}
         className="opacity-0 group-hover:opacity-100 transition-opacity text-red-400 hover:text-red-600 p-1"
         aria-label="Delete task"
       >
         <Trash2 size={18} />
       </button>
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete Task"
+        message="Are you sure you want to delete this task? This action cannot be undone."
+      />
     </motion.div>
   );
 };
