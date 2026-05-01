@@ -1,13 +1,14 @@
-import { useEffect } from 'react'
-import { useTasks } from './hooks/useTasks'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { Toaster } from 'react-hot-toast';
+import { useTasks } from './hooks/useTasks';
+import { TaskInput } from './components/TaskInput';
+import { TaskFilters } from './components/TaskFilters';
+import { TaskList } from './components/TaskList';
+import { TaskSkeleton } from './components/TaskSkeleton';
+import { ListChecks } from 'lucide-react';
+import './App.css';
 
 function App() {
   const { 
-    tasks, 
     filteredTasks, 
     loading, 
     error, 
@@ -18,120 +19,58 @@ function App() {
     deleteTask 
   } = useTasks();
 
-  useEffect(() => {
-    console.log('App Stats:', {
-      total: tasks.length,
-      filtered: filteredTasks.length,
-      loading,
-      filter,
-      hasError: !!error,
-      actionsAvailable: !!(addTask && toggleTask && deleteTask && setFilter)
-    });
-  }, [tasks, filteredTasks, loading, error, filter, addTask, toggleTask, deleteTask, setFilter]);
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1 className="text-5xl font-bold text-blue-600 underline">Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4 transition-colors">
+      <Toaster position="bottom-right" />
+      
+      <div className="max-w-2xl mx-auto">
+        <header className="text-center mb-10">
+          <div className="flex justify-center mb-4 text-blue-600">
+            <ListChecks size={48} strokeWidth={2.5} />
+          </div>
+          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-2">
+            Task Master
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400 font-medium">
+            Stay organized and productive.
           </p>
-        </div>
-      </section>
+        </header>
 
-      <div className="ticks"></div>
+        <main className="bg-white dark:bg-gray-900 shadow-xl shadow-blue-500/5 rounded-3xl p-6 md:p-8 border border-gray-100 dark:border-gray-800">
+          <TaskInput onAdd={addTask} />
+          
+          <TaskFilters 
+            currentFilter={filter} 
+            onFilterChange={setFilter} 
+          />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          {error && (
+            <div className="p-4 mb-6 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-center text-sm font-medium border border-red-100 dark:border-red-900/30">
+              Error: {error}
+            </div>
+          )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          {loading ? (
+            <TaskSkeleton />
+          ) : (
+            <TaskList 
+              tasks={filteredTasks} 
+              onToggle={toggleTask} 
+              onDelete={deleteTask} 
+            />
+          )}
+
+          {!loading && filteredTasks.length > 0 && (
+            <footer className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 text-center">
+              <p className="text-sm text-gray-400">
+                Showing {filteredTasks.length} tasks
+              </p>
+            </footer>
+          )}
+        </main>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
