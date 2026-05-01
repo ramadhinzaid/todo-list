@@ -6,11 +6,11 @@ describe('useTasks Hook', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
-    global.fetch.mockReset();
+    window.fetch.mockReset();
   });
 
   it('should initialize with empty tasks if localStorage is empty', async () => {
-    global.fetch.mockResolvedValueOnce({
+    window.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => [],
     });
@@ -24,7 +24,7 @@ describe('useTasks Hook', () => {
   });
 
   it('should add a task', async () => {
-    global.fetch.mockResolvedValueOnce({
+    window.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => [],
     });
@@ -42,7 +42,7 @@ describe('useTasks Hook', () => {
   });
 
   it('should toggle a task status', async () => {
-    global.fetch.mockResolvedValueOnce({
+    window.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => [],
     });
@@ -70,7 +70,7 @@ describe('useTasks Hook', () => {
   });
 
   it('should delete a task', async () => {
-    global.fetch.mockResolvedValueOnce({
+    window.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => [],
     });
@@ -92,7 +92,7 @@ describe('useTasks Hook', () => {
   });
 
   it('should filter tasks correctly', async () => {
-    global.fetch.mockResolvedValueOnce({
+    window.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => [],
     });
